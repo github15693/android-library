@@ -1,0 +1,33 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 22
+    buildToolsVersion "23.0.0 rc3"
+
+    defaultConfig {
+        applicationId "com.innoria.khanhduong.library"
+        minSdkVersion 14
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:appcompat-v7:22.2.0'
+
+    //api
+    compile 'com.squareup.okhttp:okhttp:2.4.0'
+    //progress dialog circle waiting
+    compile 'com.pnikosis:materialish-progress:1.5'
+    //crop image
+    compile 'com.soundcloud.android:android-crop:1.0.0@aar'
+    
+}
