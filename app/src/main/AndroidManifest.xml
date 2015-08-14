@@ -20,8 +20,6 @@
             </intent-filter>
         </activity>
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
-
-
         <activity
             android:name=".Example.ExampleOkhttpActivity"
             android:label="@string/title_activity_example_okhttp" >
@@ -29,6 +27,14 @@
         <activity
             android:name=".Example.ExampleCropImageActivity"
             android:label="@string/title_activity_example_crop_image" >
+        </activity>
+        <activity
+            android:name=".Example.ExampleSendEmailActivity"
+            android:label="@string/title_activity_example_send_email" >
+        </activity>
+        <activity
+            android:name=".Example.ExampleDeviceUtilsActivity"
+            android:label="@string/title_activity_example_device_utils" >
         </activity>
     </application>
 

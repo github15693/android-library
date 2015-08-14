@@ -16,7 +16,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.innoria.khanhduong.library.Example.ExampleCropImageActivity;
+import com.innoria.khanhduong.library.Example.ExampleDeviceUtilsActivity;
 import com.innoria.khanhduong.library.Example.ExampleOkhttpActivity;
+import com.innoria.khanhduong.library.Example.ExampleSendEmailActivity;
 import com.soundcloud.android.crop.Crop;
 
 import java.io.File;
@@ -31,7 +33,7 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         list = (ListView) findViewById(R.id.list);
-        String[] arrList = {"okhttp", "Crop image"};
+        String[] arrList = {"okhttp", "Crop image", "Send email", "Device Utils"};
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrList);
         list.setAdapter(arrayAdapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -45,6 +47,16 @@ public class MainActivity extends ActionBarActivity {
                     }
                     case "Crop image":{
                         Intent cropImage = new Intent(getBaseContext(), ExampleCropImageActivity.class);
+                        startActivity(cropImage);
+                        break;
+                    }
+                    case "Send email":{
+                        Intent cropImage = new Intent(getBaseContext(), ExampleSendEmailActivity.class);
+                        startActivity(cropImage);
+                        break;
+                    }
+                    case "Device Utils":{
+                        Intent cropImage = new Intent(getBaseContext(), ExampleDeviceUtilsActivity.class);
                         startActivity(cropImage);
                         break;
                     }
