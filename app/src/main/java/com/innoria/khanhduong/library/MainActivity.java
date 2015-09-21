@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.innoria.khanhduong.library.Example.ExampleContactsActivity;
 import com.innoria.khanhduong.library.Example.ExampleCropImageActivity;
 import com.innoria.khanhduong.library.Example.ExampleDeviceUtilsActivity;
 import com.innoria.khanhduong.library.Example.ExampleOkhttpActivity;
@@ -33,7 +34,7 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         list = (ListView) findViewById(R.id.list);
-        String[] arrList = {"okhttp", "Crop image", "Send email", "Device Utils"};
+        String[] arrList = {"okhttp", "Crop image", "Send email", "Device Utils", "Contacts"};
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrList);
         list.setAdapter(arrayAdapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -51,13 +52,18 @@ public class MainActivity extends ActionBarActivity {
                         break;
                     }
                     case "Send email":{
-                        Intent cropImage = new Intent(getBaseContext(), ExampleSendEmailActivity.class);
-                        startActivity(cropImage);
+                        Intent sendEmail = new Intent(getBaseContext(), ExampleSendEmailActivity.class);
+                        startActivity(sendEmail);
                         break;
                     }
                     case "Device Utils":{
-                        Intent cropImage = new Intent(getBaseContext(), ExampleDeviceUtilsActivity.class);
-                        startActivity(cropImage);
+                        Intent deviceUtils = new Intent(getBaseContext(), ExampleDeviceUtilsActivity.class);
+                        startActivity(deviceUtils);
+                        break;
+                    }
+                    case "Contacts":{
+                        Intent contacts = new Intent(getBaseContext(), ExampleContactsActivity.class);
+                        startActivity(contacts);
                         break;
                     }
                 }

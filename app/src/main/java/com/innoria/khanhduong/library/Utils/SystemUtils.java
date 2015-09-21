@@ -1,12 +1,20 @@
 package com.innoria.khanhduong.library.Utils;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.provider.ContactsContract;
 import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.util.Log;
+
+import com.innoria.khanhduong.library.Systems.Contacts.Contact;
+import com.innoria.khanhduong.library.Systems.Contacts.EmailContact;
+import com.innoria.khanhduong.library.Systems.Contacts.PhoneContact;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,6 +24,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -156,17 +165,78 @@ public class SystemUtils {
         }
     }
 
-    public static float convertDpToPixel(float dp, Context context){
+    public static float convertDpToPixel(Context context, float dp){
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
         float px = dp * (metrics.densityDpi / 160f);
         return px;
     }
 
-    public static float convertPixelsToDp(float px, Context context){
+    public static float convertPixelsToDp(Context context, float px){
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
         float dp = px / (metrics.densityDpi / 160f);
         return dp;
+    }
+
+    /***
+     * get list contact of devices
+     * @param ctx
+     * @return
+     */
+    public static List<Contact> getContacts(Context ctx){
+        List<Contact> contacts = new ArrayList<Contact>();
+        ContentResolver cr = ctx.getContentResolver();
+        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
+                null, null, null, ContactsContract.Contacts.DISPLAY_NAME + " ASC");
+        if (cur.getCount() > 0) {
+            while (cur.moveToNext()) {
+                String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
+                String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                Contact contact = new Contact();
+                contact.setId(Integer.parseInt(id));
+                contact.setName(name);
+                if (Integer.parseInt(cur.getString(
+                        cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
+                    Cursor pCur = cr.query(
+                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                            null,
+                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" = ?",
+                            new String[]{id}, null);
+                    List<PhoneContact> phoneContacts = new ArrayList<PhoneContact>();
+                    while (pCur.moveToNext()) {
+                        String phoneNo = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        String type = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Email.TYPE));
+//                        Log.d("DEBUG", "CONTACT==> " + "id: " + id + "Name: " + name + ", PhoneContact No: " + phoneNo + ", Type: " + type);
+                        PhoneContact phoneContact = new PhoneContact();
+                        phoneContact.setPhone(phoneNo);
+                        phoneContact.setType(Integer.parseInt(type));
+                        phoneContacts.add(phoneContact);
+                    }
+                    contact.setPhoneContacts(phoneContacts);
+                    pCur.close();
+
+                    Cursor eCur = cr.query(
+                            ContactsContract.CommonDataKinds.Email.CONTENT_URI,
+                            null,
+                            ContactsContract.CommonDataKinds.Email.CONTACT_ID +" = ?",
+                            new String[]{id}, null);
+                    List<EmailContact> emailContacts = new ArrayList<EmailContact>();
+                    while (eCur.moveToNext()) {
+                        String email = eCur.getString(eCur.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
+                        String type = eCur.getString(eCur.getColumnIndex(ContactsContract.CommonDataKinds.Email.TYPE));
+//                        Log.d("DEBUG", "CONTACT==> "+ "id: " + id + "Name: " + name + ", Email: " + email + ", Type: " + type);
+                        EmailContact emailContact = new EmailContact();
+                        emailContact.setEmail(email);
+                        emailContact.setType(Integer.parseInt(type));
+                        emailContacts.add(emailContact);
+                    }
+                    contact.setEmailContacts(emailContacts);
+                    eCur.close();
+                    contacts.add(contact);
+                }
+            }
+        }
+        return contacts;
     }
 }

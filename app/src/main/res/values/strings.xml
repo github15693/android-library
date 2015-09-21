@@ -7,4 +7,5 @@
     <string name="title_activity_example_crop_image">ExampleCropImageActivity</string>
     <string name="title_activity_example_send_email">ExampleSendEmailActivity</string>
     <string name="title_activity_example_device_utils">ExampleDeviceUtilsActivity</string>
+    <string name="title_activity_example_contacts">ExampleContactsActivity</string>
 </resources>

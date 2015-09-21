@@ -1,18 +1,35 @@
 package com.innoria.khanhduong.library.Example;
 
+import android.content.ContentResolver;
+import android.database.Cursor;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 
+import com.innoria.khanhduong.library.Example.Adapter.ContactAdapter;
 import com.innoria.khanhduong.library.R;
+import com.innoria.khanhduong.library.Systems.Contacts.Contact;
+import com.innoria.khanhduong.library.Utils.SystemUtils;
+
+import java.util.List;
 
 public class ExampleContactsActivity extends AppCompatActivity {
-
+    private ListView listView;
+    private ContactAdapter contactAdapter;
+    private List<Contact> contactList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_example_contacts);
+        listView = (ListView) findViewById(R.id.list);
+
+        contactList = SystemUtils.getContacts(getBaseContext());
+        contactAdapter = new ContactAdapter(this, R.layout.example_item_contact, contactList);
+        listView.setAdapter(contactAdapter);
     }
 
     @Override
