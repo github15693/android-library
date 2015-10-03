@@ -8,4 +8,16 @@
     <string name="title_activity_example_send_email">ExampleSendEmailActivity</string>
     <string name="title_activity_example_device_utils">ExampleDeviceUtilsActivity</string>
     <string name="title_activity_example_contacts">ExampleContactsActivity</string>
+    <string name="title_activity_example_crypter">ExampleCrypterActivity</string>
+
+
+
+
+
+
+
+
+    <!-- Api error -->
+    <string name="error_can_not_deserialize_json">Can\'t deserialize json.</string>
+    <string name="error_not_authorization">Not authorization.</string>
 </resources>

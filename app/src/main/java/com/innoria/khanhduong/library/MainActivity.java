@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.innoria.khanhduong.library.Example.ExampleContactsActivity;
 import com.innoria.khanhduong.library.Example.ExampleCropImageActivity;
+import com.innoria.khanhduong.library.Example.ExampleCrypterActivity;
 import com.innoria.khanhduong.library.Example.ExampleDeviceUtilsActivity;
 import com.innoria.khanhduong.library.Example.ExampleOkhttpActivity;
 import com.innoria.khanhduong.library.Example.ExampleSendEmailActivity;
@@ -34,7 +35,7 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         list = (ListView) findViewById(R.id.list);
-        String[] arrList = {"okhttp", "Crop image", "Send email", "Device Utils", "Contacts"};
+        String[] arrList = {"okhttp", "Crop image", "Send email", "Device Utils", "Contacts", "Crypter"};
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrList);
         list.setAdapter(arrayAdapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -64,6 +65,11 @@ public class MainActivity extends ActionBarActivity {
                     case "Contacts":{
                         Intent contacts = new Intent(getBaseContext(), ExampleContactsActivity.class);
                         startActivity(contacts);
+                        break;
+                    }
+                    case "Crypter":{
+                        Intent crypter = new Intent(getBaseContext(), ExampleCrypterActivity.class);
+                        startActivity(crypter);
                         break;
                     }
                 }

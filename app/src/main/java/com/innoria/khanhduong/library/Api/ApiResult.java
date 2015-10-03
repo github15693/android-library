@@ -1,4 +1,6 @@
-package com.innoria.khanhduong.library.HttpClient;
+package com.innoria.khanhduong.library.Api;
+
+import com.google.gson.annotations.SerializedName;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -6,15 +8,26 @@ import org.json.JSONObject;
 /**
  * Created by pika on 8/11/2015.
  */
-public class ApiResult {
+public class ApiResult<T> {
+    @SerializedName("code")
     private int code;
+    @SerializedName("message")
     private String message;
-    private String data;
+    @SerializedName("data")
+    private T data;
+    @SerializedName("page")
+    private int page;
+    @SerializedName("totalPage")
+    private int totalPage;
+    @SerializedName("rowPerPage")
+    private int rowPerPage;
 
-    public ApiResult(){
-        this.code = 0;
-        this.message = "";
-        this.data = "";
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
     }
 
     public int getCode() {
@@ -31,14 +44,6 @@ public class ApiResult {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public String getData() {
-        return data;
-    }
-
-    public void setData(String data) {
-        this.data = data;
     }
 
     public ApiResult convertFromJsonObject(String jsonObject){

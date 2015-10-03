@@ -41,6 +41,10 @@
             android:name=".Example.ExampleContactsActivity"
             android:label="@string/title_activity_example_contacts" >
         </activity>
+        <activity
+            android:name=".Example.ExampleCrypterActivity"
+            android:label="@string/title_activity_example_crypter" >
+        </activity>
     </application>
 
 </manifest>

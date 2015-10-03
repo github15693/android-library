@@ -9,8 +9,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.innoria.khanhduong.library.HttpClient.ApiResult;
-import com.innoria.khanhduong.library.HttpClient.KBaseHttpClient;
+import com.google.gson.internal.StringMap;
+import com.innoria.khanhduong.library.Api.ApiResult;
+import com.innoria.khanhduong.library.Api.KBaseApi;
+import com.innoria.khanhduong.library.Api.Listeners.OnExecuteApiListener;
 import com.innoria.khanhduong.library.Progress.KBaseProgress;
 import com.innoria.khanhduong.library.R;
 import com.squareup.okhttp.Callback;
@@ -19,64 +21,47 @@ import com.squareup.okhttp.Response;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 
 public class ExampleOkhttpActivity extends ActionBarActivity {
-    private final KBaseHttpClient kBaseHttpClient = new KBaseHttpClient();
     private TextView text;
     private Button btn;
-    private KBaseProgress mKBaseProgress;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_example_okhttp);
         text = (TextView) findViewById(R.id.text);
         btn = (Button) findViewById(R.id.btn);
-        mKBaseProgress = new KBaseProgress();
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                KBaseProgress.circleWaiting(ExampleOkhttpActivity.this);
-//                ApiResult apiResult = callGetApiWithParameters();
-//                text.setText(apiResult.getData());
-//                KBaseProgress.dismiss();
-                callGetApiWithParametersynTask();
+                executeGet();
             }
         });
     }
 
-    public ApiResult callGetApiWithParameters() {
-        Toast.makeText(getBaseContext(), "call run", Toast.LENGTH_SHORT).show();
-        String rs = "";
-        HashMap<String, String> parameters = new HashMap<>();
-        parameters.put("user_id", "6");
-        parameters.put("child_id", "2");
-        kBaseHttpClient.builderGetRequest("http://demo.innoria.com/allerpal/api/children/accept_share/format/json", parameters);
-
-        return kBaseHttpClient.execute();
-    }
-    public void callGetApiWithParametersynTask() {
-        mKBaseProgress.circleWaiting(ExampleOkhttpActivity.this);
-        Toast.makeText(getBaseContext(), "start call api", Toast.LENGTH_SHORT).show();
-        String rs = "";
-        HashMap<String, String> parameters = new HashMap<>();
-        parameters.put("user_id", "6");
-        parameters.put("child_id", "2");
-        kBaseHttpClient.builderGetRequest("http://demo.innoria.com/allerpal/api/children/accept_share/format/json", parameters);
-
-        kBaseHttpClient.getmCall().enqueue(new Callback() {
+    private void executeGet(){
+        KBaseApi mKBaseApi = new KBaseApi();
+        mKBaseApi.setOnExecuteApiListener(new OnExecuteApiListener() {
             @Override
-            public void onFailure(Request request, IOException e) {
-                mKBaseProgress.dismiss();
-                Toast.makeText(getBaseContext(), "call api onFailure", Toast.LENGTH_SHORT).show();
+            public void onFailure(ApiResult apiResult) {
+                super.onFailure(apiResult);
             }
 
             @Override
-            public void onResponse(Response response) throws IOException {
-                mKBaseProgress.dismiss();
-                Toast.makeText(getBaseContext(), "call api onResponse", Toast.LENGTH_SHORT).show();
+            public void onSuccess(ApiResult apiResult) {
+                super.onSuccess(apiResult);
+            }
+
+            @Override
+            public void onNotFound(ApiResult apiResult) {
+                super.onNotFound(apiResult);
             }
         });
+        HashMap<String, String> paramteters = new HashMap<String, String>();
+        mKBaseApi.execute(KBaseApi.GET, "http://demo.innoria.com/allerpal-test/api/children/get_list_shared_by_child/format/json", paramteters);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

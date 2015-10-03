@@ -1,4 +1,4 @@
-package com.innoria.khanhduong.library.HttpClient;
+package com.innoria.khanhduong.library.Api;
 
 /**
  * Created by pika on 8/11/2015.
