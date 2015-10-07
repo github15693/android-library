@@ -8,14 +8,21 @@
     android:orientation="vertical">
 
     <Button
-        android:id="@+id/btn"
-        android:text="Call api"
+        android:id="@+id/btn_get"
+        android:text="Call api GET"
+        android:textSize="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/btn_post"
+        android:text="Call api POST"
         android:textSize="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <TextView
-        android:id="@+id/text"
-        android:text="@string/hello_world" android:layout_width="wrap_content"
+        android:id="@+id/tv_rs"
+        android:text="@string/hello_world"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
 </LinearLayout>

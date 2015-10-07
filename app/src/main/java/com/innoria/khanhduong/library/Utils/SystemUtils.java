@@ -15,6 +15,7 @@ import android.util.Log;
 import com.innoria.khanhduong.library.Systems.Contacts.Contact;
 import com.innoria.khanhduong.library.Systems.Contacts.EmailContact;
 import com.innoria.khanhduong.library.Systems.Contacts.PhoneContact;
+import com.scottyab.aescrypt.AESCrypt;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,6 +24,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -243,19 +245,48 @@ public class SystemUtils {
         return contacts;
     }
 
-    private static byte[] encrypt(byte[] raw, byte[] clear) throws Exception {
-        SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
-        Cipher cipher = Cipher.getInstance("AES");
-        cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
-        byte[] encrypted = cipher.doFinal(clear);
+    private static final String PASSWORD_ENCRYPT = "KLibrary151693";
+    private static String encrypt(String data){
+        String encrypted = "";
+        try {
+            encrypted =  AESCrypt.decrypt(PASSWORD_ENCRYPT, data);
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        }
         return encrypted;
     }
 
-    private static byte[] decrypt(byte[] raw, byte[] encrypted) throws Exception {
-        SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
-        Cipher cipher = Cipher.getInstance("AES");
-        cipher.init(Cipher.DECRYPT_MODE, skeySpec);
-        byte[] decrypted = cipher.doFinal(encrypted);
+    private static String decrypt(String encryptedData) {
+        String decrypted = "";
+        try {
+            decrypted = AESCrypt.decrypt(PASSWORD_ENCRYPT, encryptedData);
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        }
         return decrypted;
+    }
+
+    /***
+     *
+     * @param image
+     * @param maxSize
+     * @return
+     */
+    public static Bitmap scaleRatioImage(Bitmap image, int maxSize) {
+        if(image == null)
+            return null;
+        int width = image.getWidth();
+        int height = image.getHeight();
+        Bitmap bp = image;
+        float bitmapRatio = (float)width / (float) height;
+        if (bitmapRatio > 0) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        bp = Bitmap.createScaledBitmap(image, width, height, true);
+        return bp;
     }
 }

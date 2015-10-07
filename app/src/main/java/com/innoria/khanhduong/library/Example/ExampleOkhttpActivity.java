@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.google.gson.internal.StringMap;
 import com.innoria.khanhduong.library.Api.ApiResult;
 import com.innoria.khanhduong.library.Api.KBaseApi;
@@ -24,18 +25,35 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ExampleOkhttpActivity extends ActionBarActivity {
-    private TextView text;
-    private Button btn;
+    private TextView tv_rs;
+    private Button btn_get, btn_post;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_example_okhttp);
-        text = (TextView) findViewById(R.id.text);
-        btn = (Button) findViewById(R.id.btn);
-        btn.setOnClickListener(new View.OnClickListener() {
+        tv_rs = (TextView) findViewById(R.id.tv_rs);
+        btn_get = (Button) findViewById(R.id.btn_get);
+        btn_post = (Button) findViewById(R.id.btn_post);
+        btn_get.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 executeGet();
+            }
+        });
+        btn_post.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                executePost();
+            }
+        });
+
+    }
+
+    private void showResult(final ApiResult apiResult){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                tv_rs.setText(new Gson().toJson(apiResult));
             }
         });
     }
@@ -46,20 +64,50 @@ public class ExampleOkhttpActivity extends ActionBarActivity {
             @Override
             public void onFailure(ApiResult apiResult) {
                 super.onFailure(apiResult);
+                showResult(apiResult);
             }
 
             @Override
             public void onSuccess(ApiResult apiResult) {
                 super.onSuccess(apiResult);
+                showResult(apiResult);
+            }
+
+            @Override
+            public void onNotFound(final ApiResult apiResult) {
+                super.onNotFound(apiResult);
+                showResult(apiResult);
+            }
+        });
+        HashMap<String, String> paramteters = new HashMap<String, String>();
+        paramteters.put("child_id", "2");
+        mKBaseApi.execute(KBaseApi.GET, "http://demo.innoria.com/allerpal-test/api/children/get_list_shared_by_child/format/json", paramteters);
+    }
+    private void executePost(){
+        KBaseApi mKBaseApi = new KBaseApi();
+        mKBaseApi.setOnExecuteApiListener(new OnExecuteApiListener() {
+            @Override
+            public void onFailure(ApiResult apiResult) {
+                super.onFailure(apiResult);
+                showResult(apiResult);
+            }
+
+            @Override
+            public void onSuccess(ApiResult apiResult) {
+                super.onSuccess(apiResult);
+                showResult(apiResult);
             }
 
             @Override
             public void onNotFound(ApiResult apiResult) {
                 super.onNotFound(apiResult);
+                showResult(apiResult);
             }
         });
         HashMap<String, String> paramteters = new HashMap<String, String>();
-        mKBaseApi.execute(KBaseApi.GET, "http://demo.innoria.com/allerpal-test/api/children/get_list_shared_by_child/format/json", paramteters);
+        paramteters.put("user_id", "2");
+        paramteters.put("child_id", "2");
+        mKBaseApi.execute(KBaseApi.POST, "http://demo.innoria.com/allerpal-test/api/allergies/get_allergies/format/json", paramteters);
     }
 
     @Override

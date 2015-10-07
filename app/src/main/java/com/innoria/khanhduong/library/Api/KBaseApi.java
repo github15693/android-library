@@ -1,5 +1,7 @@
 package com.innoria.khanhduong.library.Api;
 
+import android.app.Activity;
+import android.content.Entity;
 import android.content.res.Resources;
 import android.os.StrictMode;
 
@@ -10,8 +12,12 @@ import com.innoria.khanhduong.library.R;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Credentials;
+import com.squareup.okhttp.FormEncodingBuilder;
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.MultipartBuilder;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
@@ -31,8 +37,9 @@ public class KBaseApi {
     private final String AUTH_NAME = "allerpal@gmail.com", AUTH_PASSWORD = "123456";
     private String mCredentials;
     private Call mCall;
-    public static int GET, POST;
+    public static int GET = 0, POST = 1;
     private OnExecuteApiListener mOnExecuteApiListener;
+    public static final MediaType JSON = MediaType.parse("multipart/form-data; charset=utf-8");
 
     public KBaseApi(){
         mOkHttpClient = new OkHttpClient();
@@ -49,6 +56,15 @@ public class KBaseApi {
     public void execute(int method, String url, HashMap<String, String> paramters){
         if(method == GET){
             mRequest = new Request.Builder().url(compareQuery(url, paramters)).header("Authorization", mCredentials).build();
+        }
+        if(method == POST){
+            MultipartBuilder requestBuilder = new MultipartBuilder();
+            requestBuilder.type(MultipartBuilder.FORM);
+            for (Map.Entry<String, String> entry : paramters.entrySet()) {
+                requestBuilder.addFormDataPart(entry.getKey(), entry.getValue());
+            }
+            RequestBody requestBody = requestBuilder.build();
+            mRequest = new Request.Builder().url(url).post(requestBody).header("Authorization", mCredentials).build();
         }
         mCall = mOkHttpClient.newCall(mRequest);
         mCall.enqueue(new Callback() {
@@ -115,10 +131,6 @@ public class KBaseApi {
             }
         }catch (Exception e){
             e.printStackTrace();
-            ApiResult apiResult = new ApiResult();
-            apiResult.setCode(response.code());
-            apiResult.setMessage(e.getMessage());
-            mOnExecuteApiListener.onFailure(apiResult);
         }
 
 
